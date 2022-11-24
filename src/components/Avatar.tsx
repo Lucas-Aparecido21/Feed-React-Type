@@ -1,11 +1,11 @@
 import React from 'react';
 import './Avatar.modules.css';
-export function Avatar(props)
-{
-    return(
 
-    <img className= "avatar"src={props.src} />
-    );
-
-
+interface AvatarProps {
+  hasBorder?: boolean;
+  src?: string;
+  alt?: string;
+}
+export function Avatar(props: AvatarProps) {
+  return <img className="avatar" src={props.src} />;
 }
