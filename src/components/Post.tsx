@@ -1,9 +1,18 @@
-import React, { FormEvent, useState, ChangeEvent, InvalidEvent } from 'react';
+/* eslint-disable array-callback-return */
+/* eslint-disable jsx-a11y/anchor-is-valid */
+import React, {
+  FormEvent,
+  useState,
+  ChangeEvent,
+  InvalidEvent,
+  useEffect,
+} from 'react';
 import './Post.modules.css';
 import { Comment } from './Comment';
 import { Avatar } from './Avatar';
 import { format, formatDistanceToNow } from 'date-fns';
 import ptBR from 'date-fns/locale/pt-BR';
+import { createUniqueId } from '../utils/createUniqueId';
 
 interface Author {
   name: string;
@@ -22,6 +31,11 @@ interface PostProps {
   content: Content[];
 }
 
+export interface CommentProps {
+  id: number;
+  comment: string;
+}
+
 export function Post({ author, publishedAt, content }: PostProps) {
   const publisheDateFormatted = format(
     publishedAt,
@@ -32,7 +46,9 @@ export function Post({ author, publishedAt, content }: PostProps) {
     locale: ptBR,
     addSuffix: true,
   });
-  const [comments, setComments] = useState(['Post  muito bacana!']);
+  const [comments, setComments] = useState<CommentProps[]>([
+    { id: 1, comment: 'Post  muito bacana!' },
+  ]);
 
   const [newCommentText, setNewCommentText] = useState('');
 
@@ -48,16 +64,27 @@ export function Post({ author, publishedAt, content }: PostProps) {
   function handleCreateNewComment(event: FormEvent) {
     event.preventDefault();
     setNewCommentText('');
-    setComments([...comments, newCommentText]);
+
+    const newComent = {
+      id: createUniqueId(comments),
+      comment: newCommentText,
+    };
+
+    setComments([...comments, newComent]);
   }
 
-  function deleteComment(commentToDelete: string) {
+  function deleteComment(commentToDelete: number) {
     const commentsWithoutDeletedOne = comments.filter((comment) => {
-      return comment !== commentToDelete;
+      return comment.id !== commentToDelete;
     });
 
     setComments(commentsWithoutDeletedOne);
   }
+
+  useEffect(() => {
+    console.log(comments);
+  }, [comments]);
+
   return (
     <article className="post">
       <header>
@@ -112,8 +139,8 @@ export function Post({ author, publishedAt, content }: PostProps) {
         {comments.map((comment) => {
           return (
             <Comment
-              key={comment}
-              content={comment}
+              key={comment.id}
+              comment={comment}
               onDeleteComment={deleteComment}
             />
           );

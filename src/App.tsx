@@ -50,7 +50,7 @@ const posts = [
 
     content: [
       { type: 'paragraph', content: 'teste teste teste' },
-      { type: 'paragraph', content: 'teste teste teste' },
+      { type: 'paragraph', content: 'teste teste' },
       { type: 'link', content: '#teste2' },
     ],
     publishedAt: new Date('2022-05-10 20:00:00'),

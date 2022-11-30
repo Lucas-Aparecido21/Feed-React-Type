@@ -3,13 +3,14 @@ import './Comment.modules.css';
 import { Trash } from 'phosphor-react';
 import { ThumbsUp } from 'phosphor-react';
 import { Avatar } from './Avatar';
+import { CommentProps as CommentInterface } from './Post';
 
 interface CommentProps {
-  content: string;
-  onDeleteComment: (comment: string) => void;
+  comment: CommentInterface;
+  onDeleteComment: (comment: number) => void;
 }
 
-export function Comment({ content, onDeleteComment }: CommentProps) {
+export function Comment({ comment, onDeleteComment }: CommentProps) {
   const [likeCount, setLikeCount] = useState(0);
 
   function handleLikeComment() {
@@ -17,7 +18,7 @@ export function Comment({ content, onDeleteComment }: CommentProps) {
   }
 
   function handleDeleteComment() {
-    onDeleteComment(content);
+    onDeleteComment(comment.id);
   }
 
   return (
@@ -36,7 +37,7 @@ export function Comment({ content, onDeleteComment }: CommentProps) {
               <Trash size={24} />
             </button>
           </header>
-          <p>{content}</p>
+          <p>{comment.comment}</p>
         </div>
 
         <footer>
